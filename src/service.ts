@@ -7,7 +7,7 @@ import cors from 'cors';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 9000;
 
 // DB Connection
 require("../db-config/db-connection");
@@ -17,6 +17,17 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true })); // Use this middleware to parse incoming requests with URL-encoded payloads (e.g., form submissions)
 app.use(express.json()); // Use this middleware to parse incoming requests with JSON payloads.
 
+// ROUTE FUNCTIONS
+import { adminRoute } from '../routes/admin/admin.routes';
+import { subAdminRoute } from '../routes/sub-admin/sub-admin.route';
+import { userRoute } from '../routes/users/users.route';
+
+// ROUTES
+app.use('/api/admin', adminRoute);  // For Admin
+
+app.use('/api/sub-admin', subAdminRoute); // For SubAdmin
+
+app.use('/api/user', userRoute); // For User
 
 // Error handling middleware 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

@@ -13,7 +13,7 @@ const poolConfig: PoolConfig = {
     allowExitOnIdle: false,
 }
 
-const pool = new Pool(poolConfig);
+export const pool = new Pool(poolConfig);
 
 // IIFE
 (async () => {
@@ -30,5 +30,3 @@ const pool = new Pool(poolConfig);
         }
     }
 })();
-
-module.exports = { pool };
