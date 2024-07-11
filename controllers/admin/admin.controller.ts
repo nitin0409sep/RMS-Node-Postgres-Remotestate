@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common/users.helper'
 import { getAllSubAdminsData } from '../../db-helper/admin/admin.helper';
+import { createRestaurant, getAllRestaurant } from '../../db-helper/common/restaurant.helper';
 import { Roles } from '../../utils/roles.interface';
 import { User } from '../../utils/users.interface';
 import { ExtendedRequest } from '../../utils/users.interface';
@@ -116,6 +117,51 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
 
             // Successfully Fetched All Sub Admins 
             return res.status(200).json({ data: userData, error: null, status: 'Ok' });
+        }
+
+        // Error While Fetching All Sub Admins
+        return res.status(200).json({ data: [], error: null, status: 'Ok' });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+}
+
+// CREATE RESTAURANT 
+export const createRestaurantByAdmin = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const { restaurant_name } = req.body;
+
+        // restaurant_name Given or Not
+        if (!restaurant_name)
+            return res.status(400).json({ error: `Please provide Restaurant Name}` });
+
+        // Created_By
+        const user_id = req.user?.user_id;
+
+        if (!user_id) return res.status(401).json({ error: "Unauthorized User" });
+
+        const result = await createRestaurant(user_id!, restaurant_name);
+
+        if (result)
+            return res.status(200).json({ message: "Restaurant Created Successfully.", error: null, status: 'Ok' });
+
+        return res.status(400).json({ error: "Restaurant Is Not Created.", status: 'Ok' });
+    } catch (err) {
+        // Server Error 
+        return res.status(500).json({ error: "Something Went Wrong" });
+    }
+}
+
+// GET ALL RESTAURANT 
+export const getAllRestaurants = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const getRestaurantData: any[] | [] = await getAllRestaurant();
+
+        if (getRestaurantData.length > 0) {
+            const restaurantData = getRestaurantData.map(val => val.restaurant_name);
+
+            // Successfully Fetched All Sub Admins 
+            return res.status(200).json({ data: { restaurant_name: restaurantData }, error: null, status: 'Ok' });
         }
 
         // Error While Fetching All Sub Admins

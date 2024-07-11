@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createUserByAdmin, getAllSubAdmins, getAllUsersByAdmin } from "../../controllers/admin/admin.controller";
+import { createUserByAdmin, getAllSubAdmins, getAllUsersByAdmin, createRestaurantByAdmin, getAllRestaurants } from "../../controllers/admin/admin.controller";
 import { authenticateUser, authenticateAdmin } from '../../middlewares/authorization.auth.middleware';
 
 export const adminRoute = Router();
@@ -10,5 +10,11 @@ adminRoute.post('/createUser', [authenticateUser, authenticateAdmin], createUser
 // LIST ALL SUB ADMIN'S
 adminRoute.get('/getAllSubAdmin', [authenticateUser, authenticateAdmin], getAllSubAdmins);
 
-// GET ALL USERS
+// GET ALL USER'S
 adminRoute.get('/getAllUsers', [authenticateUser, authenticateAdmin], getAllUsersByAdmin);
+
+// CREATE RESTAURANT
+adminRoute.post('/createRestaurant', [authenticateUser, authenticateAdmin], createRestaurantByAdmin)
+
+// GET ALL RESTAURANT'S
+adminRoute.get('/getAllRestaurant', [authenticateUser, authenticateAdmin], getAllRestaurants);

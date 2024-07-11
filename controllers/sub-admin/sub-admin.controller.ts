@@ -1,9 +1,10 @@
 import { Response } from 'express';
 import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common/users.helper'
-// import { Roles } from '../../utils/roles.interface';
 import { ExtendedRequest, User } from '../../utils/users.interface';
 import validator from 'validator'; // Validator
+import { createRestaurant, getAllRestaurant } from '../../db-helper/common/restaurant.helper';
 
+// CREATE USER BY SUB ADMIN
 export const createUserBySubAdmin = async (req: ExtendedRequest, res: Response) => {
     try {
         const { user_name, email, password, role } = req.body;
@@ -54,7 +55,7 @@ export const createUserBySubAdmin = async (req: ExtendedRequest, res: Response) 
 }
 
 // GET ALL USERS BY PARTICULAR SUB 
-export const getAllUsersBySubadmin = async (req: ExtendedRequest, res: Response) => {
+export const getAllUsersCreatedBySubadmin = async (req: ExtendedRequest, res: Response) => {
     try {
         const role_id = 2;
         const user_id = req?.user?.user_id;
@@ -70,6 +71,52 @@ export const getAllUsersBySubadmin = async (req: ExtendedRequest, res: Response)
 
             // Successfully Fetched All Sub Admins 
             return res.status(200).json({ data: userData, error: null, status: 'Ok' });
+        }
+
+        // Error While Fetching All Sub Admins
+        return res.status(200).json({ data: [], error: null, status: 'Ok' });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+}
+
+// CREATE RESTAURANT 
+export const createRestaurantBySubAdmin = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const { restaurant_name } = req.body;
+
+        // restaurant_name Given or Not
+        if (!restaurant_name)
+            return res.status(400).json({ error: `Please provide Restaurant Name}` });
+
+        // Created_By
+        const user_id = req.user?.user_id;
+
+        if (!user_id) return res.status(401).json({ error: "Unauthorized User" });
+
+        const result = await createRestaurant(user_id!, restaurant_name);
+
+        if (result)
+            return res.status(200).json({ message: "Restaurant Created Successfully.", error: null, status: 'Ok' });
+
+        return res.status(400).json({ error: "Restaurant Is Not Created.", status: 'Ok' });
+    } catch (err) {
+        // Server Error 
+        return res.status(500).json({ error: "Something Went Wrong" });
+    }
+}
+
+// GET ALL RESTAURANT 
+export const getAllRestaurantCreatedBySubadmin = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const user_id = req?.user?.user_id;
+        const getRestaurantData: any[] | [] = await getAllRestaurant(user_id);
+
+        if (getRestaurantData.length > 0) {
+            const restaurantData = getRestaurantData.map(val => val.restaurant_name);
+
+            // Successfully Fetched All Sub Admins 
+            return res.status(200).json({ data: { restaurant_name: restaurantData }, error: null, status: 'Ok' });
         }
 
         // Error While Fetching All Sub Admins

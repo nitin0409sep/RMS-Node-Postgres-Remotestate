@@ -1,4 +1,4 @@
-import { createUserBySubAdmin, getAllUsersBySubadmin } from "../../controllers/sub-admin/sub-admin.controller";
+import { createRestaurantBySubAdmin, createUserBySubAdmin, getAllUsersCreatedBySubadmin } from "../../controllers/sub-admin/sub-admin.controller";
 import { Router } from "express";
 import { authenticateSubadmin, authenticateUser } from "../../middlewares/authorization.auth.middleware";
 
@@ -8,4 +8,7 @@ export const subAdminRoute = Router();
 subAdminRoute.post('/createUser', [authenticateUser, authenticateSubadmin], createUserBySubAdmin);
 
 // VIEW ALL USERS CREATED BY SUB ADMIN
-subAdminRoute.get('/getAllUsers', [authenticateUser, authenticateSubadmin], getAllUsersBySubadmin);
+subAdminRoute.get('/getAllUsers', [authenticateUser, authenticateSubadmin], getAllUsersCreatedBySubadmin);
+
+// CREATE RESTAURANT
+subAdminRoute.post('/createRestaurant', [authenticateUser, authenticateSubadmin], createRestaurantBySubAdmin)
