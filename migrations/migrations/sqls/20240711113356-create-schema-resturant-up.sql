@@ -1,3 +1,4 @@
+/* Replace with your SQL commands */
 -- ROLES TABLE
 CREATE TABLE IF NOT EXISTS roles (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -11,8 +12,9 @@ CREATE TABLE IF NOT EXISTS users (
     user_name VARCHAR(200) NOT NULL,
     user_email VARCHAR(200) NOT NULL,
     user_password VARCHAR(200) NOT NULL,
-    created_by INTEGER NOT NULL,
+    created_by INTEGER,
     user_roles INTEGER[],
+    created_by_user_id VARCHAR(200),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -51,6 +53,3 @@ CREATE TABLE IF NOT EXISTS dishes (
 INSERT INTO roles (role_id, role_name)
 VALUES (1, 'Admin'), (2, 'Subadmin'), (3, 'User');
 
--- INSERT ADMIN INTO USERS TABLE
-INSERT INTO users (user_name, user_email, user_password, created_by, user_roles)
-VALUES ('Nitin', 'admin@admin.com', '$2b$10$XA.G81OYsrcLNowGbSfXxeAaZgN/uN8z.3JrJJf6lh3Q9RDubiseC', 1, '{1}');

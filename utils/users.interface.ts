@@ -1,3 +1,5 @@
+import { Request } from "express";
+
 export interface User {
     user_id: string,
     user_name: string,
@@ -7,4 +9,8 @@ export interface User {
     user_roles: number[],
     created_at: Date,
     updated_at: Date,
+}
+
+export interface ExtendedRequest extends Request {
+    user?: User;
 }

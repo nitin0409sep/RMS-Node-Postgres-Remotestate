@@ -1,9 +1,11 @@
-import { createUserBySubAdmin } from "../../controllers/sub-admin/sub-admin.controller";
+import { createUserBySubAdmin, getAllUsersBySubadmin } from "../../controllers/sub-admin/sub-admin.controller";
 import { Router } from "express";
+import { authenticateSubadmin, authenticateUser } from "../../middlewares/authorization.auth.middleware";
 
 export const subAdminRoute = Router();
 
-// CREATE USER (User)
-subAdminRoute.post('/createUser', createUserBySubAdmin);
+// CREATE USER (User) BY SUB ADMIN
+subAdminRoute.post('/createUser', [authenticateUser, authenticateSubadmin], createUserBySubAdmin);
 
-module.exports = { subAdminRoute } ;
+// VIEW ALL USERS CREATED BY SUB ADMIN
+subAdminRoute.get('/getAllUsers', [authenticateUser, authenticateSubadmin], getAllUsersBySubadmin);

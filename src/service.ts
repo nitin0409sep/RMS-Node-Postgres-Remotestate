@@ -18,11 +18,14 @@ app.use(express.urlencoded({ extended: true })); // Use this middleware to parse
 app.use(express.json()); // Use this middleware to parse incoming requests with JSON payloads.
 
 // ROUTE FUNCTIONS
+import { authenticationRoute } from '../routes/common/auth.route';
 import { adminRoute } from '../routes/admin/admin.routes';
 import { subAdminRoute } from '../routes/sub-admin/sub-admin.route';
 import { userRoute } from '../routes/users/users.route';
 
 // ROUTES
+app.use('/api/auth', authenticationRoute); // For Login & Create Admin
+
 app.use('/api/admin', adminRoute);  // For Admin
 
 app.use('/api/sub-admin', subAdminRoute); // For SubAdmin

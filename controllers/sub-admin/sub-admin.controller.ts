@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
-import { checkUserExists, createUser } from '../../db-helper/common/users.helper'
-import { Roles } from '../../utils/roles.interface';
+import { Response } from 'express';
+import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common/users.helper'
+// import { Roles } from '../../utils/roles.interface';
+import { ExtendedRequest, User } from '../../utils/users.interface';
 import validator from 'validator'; // Validator
 
-export const createUserBySubAdmin = async (req: Request, res: Response) => {
+export const createUserBySubAdmin = async (req: ExtendedRequest, res: Response) => {
     try {
         const { user_name, email, password, role } = req.body;
         const created_by = 2;
@@ -35,8 +36,11 @@ export const createUserBySubAdmin = async (req: Request, res: Response) => {
         else if (userExists.isEmailExists)
             return res.status(400).json({ error: "Email Already Exists" });
 
+        // Which is creating the other user
+        const created_by_user_id = req?.user?.user_id;
+
         // Create a new User
-        const createUserBySubAdmin = await createUser(user_name, email, password, created_by, [created_by, role_id]);
+        const createUserBySubAdmin = await createUser(user_name, email, password, created_by, [role_id], created_by_user_id!);
 
         if (createUserBySubAdmin) // Successfully Created User
             return res.status(200).json({ message: 'User created successfully', error: null, status: 'Ok' });
@@ -46,5 +50,31 @@ export const createUserBySubAdmin = async (req: Request, res: Response) => {
     } catch (err) {
         // Server Error 
         return res.status(500).json({ error: "Something Went Wrong" });
+    }
+}
+
+// GET ALL USERS BY PARTICULAR SUB 
+export const getAllUsersBySubadmin = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const role_id = 2;
+        const user_id = req?.user?.user_id;
+        const getUsersData: User[] | [] = await getAllUsers(user_id);
+
+        if (getUsersData.length > 0) {
+            const userData = getUsersData.map((val) => {
+                return {
+                    user_name: val.user_name,
+                    user_email: val.user_email,
+                }
+            })
+
+            // Successfully Fetched All Sub Admins 
+            return res.status(200).json({ data: userData, error: null, status: 'Ok' });
+        }
+
+        // Error While Fetching All Sub Admins
+        return res.status(200).json({ data: [], error: null, status: 'Ok' });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
     }
 }

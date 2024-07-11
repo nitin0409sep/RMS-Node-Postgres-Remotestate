@@ -3,10 +3,11 @@ import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common
 import { getAllSubAdminsData } from '../../db-helper/admin/admin.helper';
 import { Roles } from '../../utils/roles.interface';
 import { User } from '../../utils/users.interface';
+import { ExtendedRequest } from '../../utils/users.interface';
 import validator from 'validator'; // Validator
 
 // CREATE USER BY ADMIN
-export const createUserByAdmin = async (req: Request, res: Response) => {
+export const createUserByAdmin = async (req: ExtendedRequest, res: Response) => {
     try {
         const { user_name, email, password, role } = req.body;
         const created_by = 1;
@@ -50,14 +51,20 @@ export const createUserByAdmin = async (req: Request, res: Response) => {
         else if (userExists.isEmailExists)
             return res.status(400).json({ error: "Email Already Exists" });
 
-
-        // Generate Token
+        // Which is creating the other user
+        const created_by_user_id = req?.user?.user_id;
 
         // Create a new User
-        const createUserByAdmin = await createUser(user_name, email, password, created_by, [created_by, role_id]);
+        const createUserByAdmin = await createUser(user_name, email, password, created_by, [role_id], created_by_user_id!);
 
-        if (createUserByAdmin) // Successfully Created User
-            return res.status(200).json({ message: 'User created successfully', error: null, status: 'Ok' });
+        if (createUserByAdmin) {
+            // Successfully Created User
+            return res.status(200).json({
+                message: "User Created successfully",
+                error: null,
+                status: "ok"
+            });
+        }
 
         // Error 
         return res.status(500).json({ error: "Failed to create user" });
@@ -86,7 +93,7 @@ export const getAllSubAdmins = async (req: Request, res: Response) => {
         }
 
         // Error While Fetching All Sub Admins
-        return res.status(500).json({ error: "Error in fetching subadmins" });
+        return res.status(200).json({ data: [], error: null, status: 'Ok' });
     } catch (err) {
         // Server Error 
         return res.status(500).json({ error: "Something Went Wrong" });
@@ -97,7 +104,7 @@ export const getAllSubAdmins = async (req: Request, res: Response) => {
 export const getAllUsersByAdmin = async (req: Request, res: Response) => {
     try {
         const role_id = 1;
-        const getUsersData: User[] | [] = await getAllUsers(role_id);
+        const getUsersData: User[] | [] = await getAllUsers();
 
         if (getUsersData.length > 0) {
             const userData = getUsersData.map((val) => {
@@ -112,7 +119,7 @@ export const getAllUsersByAdmin = async (req: Request, res: Response) => {
         }
 
         // Error While Fetching All Sub Admins
-        return res.status(500).json({ error: "Error in fetching users" });
+        return res.status(200).json({ data: [], error: null, status: 'Ok' });
     } catch (err) {
         res.status(500).json({ error: "Something went wrong" });
     }
