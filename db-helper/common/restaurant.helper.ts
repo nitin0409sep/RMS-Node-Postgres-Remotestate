@@ -20,7 +20,7 @@ export const getAllRestaurant = async (created_by?: string) => {
         let query = 'SELECT restaurant_name FROM restaurants';
 
         if (created_by)
-            query = `SELECT restaurant_name FROM restaurants where created_by = ${created_by}`
+            query = `SELECT restaurant_id ,restaurant_name FROM restaurants where created_by = '${created_by}'`
 
         const { rows } = await pool.query(query);
 
@@ -28,4 +28,4 @@ export const getAllRestaurant = async (created_by?: string) => {
     } catch (err) {
         throw err;
     }
-} 
+}

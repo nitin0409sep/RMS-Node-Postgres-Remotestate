@@ -3,6 +3,7 @@ import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common
 import { ExtendedRequest, User } from '../../utils/users.interface';
 import validator from 'validator'; // Validator
 import { createRestaurant, getAllRestaurant } from '../../db-helper/common/restaurant.helper';
+import { createDishes, getAllDishes } from '../../db-helper/common/dishes.helper';
 
 // CREATE USER BY SUB ADMIN
 export const createUserBySubAdmin = async (req: ExtendedRequest, res: Response) => {
@@ -125,3 +126,55 @@ export const getAllRestaurantCreatedBySubadmin = async (req: ExtendedRequest, re
         res.status(500).json({ error: "Something went wrong" });
     }
 }
+
+// CREATE DISH 
+export const createDishesBySubAdmin = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const { dish_name, restaurant_id } = req.body;
+
+        // restaurant_name Given or Not
+        if (!dish_name || !restaurant_id)
+            return res.status(400).json({ error: `Please provide required fields i.e Dish Name and Restaurant Id}` });
+
+        // Created_By
+        const user_id = req.user?.user_id;
+        if (!user_id) return res.status(401).json({ error: "Unauthorized User" });
+
+        const validSubRestaurantOfSubadmin = await getAllRestaurant(user_id);
+        const exists = validSubRestaurantOfSubadmin.some(restaurant => restaurant.restaurant_id === restaurant_id);
+
+        if (!exists)
+            return res.status(401).json({ error: 'Unauthorized to create dish for this restaurant' })
+
+        const result = await createDishes(user_id!, dish_name, restaurant_id);
+
+        if (result)
+            return res.status(200).json({ message: "Dish Created Successfully.", error: null, status: 'Ok' });
+
+        return res.status(400).json({ error: "Dish Is Not Created.", status: 'Ok' });
+    } catch (err) {
+        // Server Error 
+        return res.status(500).json({ error: "Something Went Wrong" });
+    }
+}
+
+// GET ALL DISHES
+export const getAllDishesBySubAdmin = async (req: ExtendedRequest, res: Response) => {
+    try {
+        const user_id = req?.user?.user_id;
+        const getDishesData: any[] | [] = await getAllDishes(user_id);
+
+        if (getDishesData.length > 0) {
+            const dishes_data = getDishesData.map(val => val.dish_name);
+
+            // Successfully Fetched All Sub Admins 
+            return res.status(200).json({ data: { dishes_name: dishes_data }, error: null, status: 'Ok' });
+        }
+
+        // Error While Fetching All Sub Admins
+        return res.status(200).json({ data: [], error: null, status: 'Ok' });
+    } catch (err) {
+        res.status(500).json({ error: "Something went wrong" });
+    }
+}
+
