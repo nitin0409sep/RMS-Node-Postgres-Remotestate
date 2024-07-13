@@ -153,7 +153,7 @@ export const createRestaurantByAdmin = async (req: ExtendedRequest, res: Respons
         if (result)
             return res.status(200).json({ message: "Restaurant Created Successfully.", error: null, status: 'Ok' });
 
-        return res.status(400).json({ error: "Restaurant Is Not Created.", status: 'Ok' });
+        return res.status(400).json({ error: "Restaurant could not be added due to a server error." });
     } catch (err) {
         // Server Error 
         return res.status(500).json({ error: "Something Went Wrong" });
@@ -198,7 +198,7 @@ export const createDishesByAdmin = async (req: ExtendedRequest, res: Response) =
         if (result)
             return res.status(200).json({ message: "Dish Created Successfully.", error: null, status: 'Ok' });
 
-        return res.status(400).json({ error: "Dish Is Not Created.", status: 'Ok' });
+        return res.status(400).json({ error: "Dish could not be added due to a server error." });
     } catch (err) {
         // Server Error 
         return res.status(500).json({ error: "Something Went Wrong" });

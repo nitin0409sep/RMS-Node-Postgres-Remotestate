@@ -1,9 +1,9 @@
 import { Response } from 'express';
 import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common/users.helper'
 import { ExtendedRequest, User } from '../../utils/users.interface';
-import validator from 'validator'; // Validator
 import { createRestaurant, getAllRestaurant } from '../../db-helper/common/restaurant.helper';
 import { createDishes, getAllDishes } from '../../db-helper/common/dishes.helper';
+import validator from 'validator'; // Validator
 
 // CREATE USER BY SUB ADMIN
 export const createUserBySubAdmin = async (req: ExtendedRequest, res: Response) => {
@@ -48,7 +48,7 @@ export const createUserBySubAdmin = async (req: ExtendedRequest, res: Response) 
             return res.status(200).json({ message: 'User created successfully', error: null, status: 'Ok' });
 
         // Error 
-        return res.status(500).json({ error: "Failed to create user" });
+        return res.status(500).json({ error: "User could not be added due to a server error." });
     } catch (err) {
         // Server Error 
         return res.status(500).json({ error: "Something Went Wrong" });
@@ -97,7 +97,6 @@ export const createRestaurantBySubAdmin = async (req: ExtendedRequest, res: Resp
             return res.status(400).json({ error: `Please provide ${missingFields.join(', ')}` });
         }
 
-
         // Created_By
         const user_id = req.user?.user_id;
 
@@ -108,7 +107,7 @@ export const createRestaurantBySubAdmin = async (req: ExtendedRequest, res: Resp
         if (result)
             return res.status(200).json({ message: "Restaurant Created Successfully.", error: null, status: 'Ok' });
 
-        return res.status(400).json({ error: "Restaurant Is Not Created.", status: 'Ok' });
+        return res.status(400).json({ error: "Restaurant could not be added due to a server error." });
     } catch (err) {
         // Server Error 
         return res.status(500).json({ error: "Something Went Wrong" });
@@ -159,7 +158,7 @@ export const createDishesBySubAdmin = async (req: ExtendedRequest, res: Response
         if (result)
             return res.status(200).json({ message: "Dish Created Successfully.", error: null, status: 'Ok' });
 
-        return res.status(400).json({ error: "Dish Is Not Created.", status: 'Ok' });
+        return res.status(400).json({ error: "Dish could not be added due to a server error." });
     } catch (err) {
         // Server Error 
         return res.status(500).json({ error: "Something Went Wrong" });
