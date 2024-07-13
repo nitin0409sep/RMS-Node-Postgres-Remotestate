@@ -84,18 +84,26 @@ export const getAllUsersCreatedBySubadmin = async (req: ExtendedRequest, res: Re
 // CREATE RESTAURANT 
 export const createRestaurantBySubAdmin = async (req: ExtendedRequest, res: Response) => {
     try {
-        const { restaurant_name } = req.body;
+        const { restaurant_name, restaurant_address_name, longitude, latitude } = req.body;
 
-        // restaurant_name Given or Not
-        if (!restaurant_name)
-            return res.status(400).json({ error: `Please provide Restaurant Name}` });
+        // Missing Requires Fields
+        if (!restaurant_name || !restaurant_address_name || !longitude || !latitude) {
+            const missingFields: string[] = [];
+            if (!restaurant_name) missingFields.push('restaurant_name');
+            if (!restaurant_address_name) missingFields.push('restaurant_address_name');
+            if (!longitude) missingFields.push('longitude');
+            if (!latitude) missingFields.push('latitude');
+
+            return res.status(400).json({ error: `Please provide ${missingFields.join(', ')}` });
+        }
+
 
         // Created_By
         const user_id = req.user?.user_id;
 
         if (!user_id) return res.status(401).json({ error: "Unauthorized User" });
 
-        const result = await createRestaurant(user_id!, restaurant_name);
+        const result = await createRestaurant(user_id!, restaurant_name, restaurant_address_name, longitude, latitude);
 
         if (result)
             return res.status(200).json({ message: "Restaurant Created Successfully.", error: null, status: 'Ok' });

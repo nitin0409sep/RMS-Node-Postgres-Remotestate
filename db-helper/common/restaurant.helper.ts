@@ -1,10 +1,17 @@
 import { pool } from '../../db-config/db-connection';
 
 // CREATE RESTAURANT
-export const createRestaurant = async (created_by: string, restaurant_name: string) => {
+export const createRestaurant = async (created_by: string, restaurant_name: string, restaurant_address_name: string, longitude: string, latitude: string) => {
     try {
-        const query = 'Insert into restaurants(created_by, restaurant_name) Values($1, $2) Returning *';
-        const values = [created_by, restaurant_name];
+        // Used composite types to store addresses
+        const query = `
+        INSERT INTO restaurants (created_by, restaurant_name, restaurant_addresses)
+        VALUES ($1, $2, ARRAY[
+          ROW($3, $4, $5)::address_type
+        ]) RETURNING *;
+      `;
+
+        const values = [created_by, restaurant_name, restaurant_address_name, longitude, latitude];
 
         const { rows } = await pool.query(query, values);
 
@@ -20,7 +27,7 @@ export const getAllRestaurant = async (created_by?: string) => {
         let query = 'SELECT restaurant_name FROM restaurants';
 
         if (created_by)
-            query = `SELECT restaurant_id ,restaurant_name FROM restaurants where created_by = '${created_by}'`
+            query = `SELECT restaurant_id, restaurant_name FROM restaurants where created_by = '${created_by}'`
 
         const { rows } = await pool.query(query);
 
