@@ -15,12 +15,12 @@ export const createDishes = async (created_by: string, dish_name: string, restau
 }
 
 // GET ALL RESTAURANT
-export const getAllDishes = async (created_by?: string) => {
+export const getAllDishes = async (restaurant_id: string, created_by: string | null | undefined) => {
     try {
-        let query = 'SELECT dish_name FROM dishes';
+        let query = `SELECT dish_name FROM dishes where restaurant_id = '${restaurant_id}'`; // For User And Admin
 
-        if (created_by)
-            query = `SELECT dish_name FROM dishes where created_by = '${created_by}'`
+        if (created_by) // For Subadmin
+            query = `SELECT dish_name FROM dishes where restaurant_id = '${restaurant_id}' AND created_by = '${created_by}'`
 
         const { rows } = await pool.query(query);
 

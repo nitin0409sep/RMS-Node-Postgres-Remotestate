@@ -22,11 +22,11 @@ export const createRestaurant = async (created_by: string, restaurant_name: stri
 }
 
 // GET ALL RESTAURANT
-export const getAllRestaurant = async (created_by?: string) => {
+export const getAllRestaurant = async (created_by: string | null | undefined) => {
     try {
-        let query = 'SELECT restaurant_name FROM restaurants';
+        let query = 'SELECT restaurant_name FROM restaurants'; // For User And Admin
 
-        if (created_by)
+        if (created_by) // For Subadmin
             query = `SELECT restaurant_id, restaurant_name FROM restaurants where created_by = '${created_by}'`
 
         const { rows } = await pool.query(query);
