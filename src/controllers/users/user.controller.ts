@@ -1,9 +1,6 @@
 import { Response } from 'express';
 import { ExtendedRequest } from '../../utils/users.interface';
-import validator from 'validator'; // Validator
-import { createRestaurant, getAllRestaurant } from '../../db-helper/common/restaurant.helper';
-import { createDishes, getAllDishes } from '../../db-helper/common/dishes.helper';
-import { addAddress, checkUserValidRole } from '../../db-helper/users/user.helper';
+import { addAddress, checkUserValidRole } from '../../database/db-helper/users/user.helper';
 
 // ADD ADDRESS OF USER
 export const addAddressOfUser = async (req: ExtendedRequest, res: Response) => {

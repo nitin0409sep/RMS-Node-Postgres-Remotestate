@@ -1,8 +1,6 @@
 import { Response } from 'express';
-import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common/users.helper'
+import { checkUserExists, createUser, getAllUsers } from '../../database/db-helper/common/users.helper'
 import { ExtendedRequest, User } from '../../utils/users.interface';
-import { createRestaurant, getAllRestaurant } from '../../db-helper/common/restaurant.helper';
-import { createDishes, getAllDishes } from '../../db-helper/common/dishes.helper';
 import validator from 'validator'; // Validator
 
 // CREATE USER BY SUB ADMIN

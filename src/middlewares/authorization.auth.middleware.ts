@@ -1,7 +1,7 @@
 import { verify } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { ExtendedRequest } from '../utils/users.interface';
-import { getUser } from '../db-helper/common/users.helper';
+import { getUser } from '../database/db-helper/common/users.helper';
 
 // Authenticate User Login or Not
 export const authenticateUser = (req: Request, res: Response, next: NextFunction) => {

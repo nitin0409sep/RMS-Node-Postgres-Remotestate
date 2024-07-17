@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { checkUserExists, createUser, getAllUsers } from '../../db-helper/common/users.helper'
-import { getAllSubAdminsData } from '../../db-helper/admin/admin.helper';
+import { checkUserExists, createUser, getAllUsers } from '../../database/db-helper/common/users.helper'
+import { getAllSubAdminsData } from '../../database/db-helper/admin/admin.helper';
 import { Roles } from '../../utils/roles.interface';
 import { User } from '../../utils/users.interface';
 import { ExtendedRequest } from '../../utils/users.interface';

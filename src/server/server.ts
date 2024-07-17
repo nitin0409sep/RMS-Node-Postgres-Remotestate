@@ -10,7 +10,7 @@ const app = express();
 const PORT = process.env.PORT || 9000;
 
 // DB Connection
-require("../db-config/db-connection");
+require("../database/db-config/db-connection");
 
 // Middleware
 app.use(cors());

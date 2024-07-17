@@ -1,5 +1,5 @@
 import { pool } from "../../db-config/db-connection"
-import { User } from "../../utils/users.interface";
+import { User } from "../../../utils/users.interface";
 
 // GET ALL SUB-ADMINS 
 export const getAllSubAdminsData = async () => {

@@ -1,7 +1,7 @@
 import e, { Response } from 'express';
 import { ExtendedRequest } from '../../utils/users.interface';
-import { createRestaurant, getAllRestaurant } from '../../db-helper/common/restaurant.helper';
-import { getUser } from '../../db-helper/common/users.helper';
+import { createRestaurant, getAllRestaurant } from '../../database/db-helper/common/restaurant.helper';
+import { getUser } from '../../database/db-helper/common/users.helper';
 
 // CREATE RESTAURANT 
 export const createRestaurants = async (req: ExtendedRequest, res: Response) => {

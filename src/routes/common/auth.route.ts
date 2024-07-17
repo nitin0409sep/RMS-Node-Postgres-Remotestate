@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { creatAdmin, loginUser } from '../../controllers/common/auth.controller'
+import { creatAdmin, loginUser, logoutUser } from '../../controllers/common/auth.controller'
 
 export const authenticationRoute = Router();
 
@@ -9,4 +9,5 @@ authenticationRoute.post('/login', loginUser);
 // CREATE USER (SUB-ADMIN, USER)
 authenticationRoute.post('/createAdmin', creatAdmin);
 
-
+// Logout User
+authenticationRoute.post('/logout', logoutUser)

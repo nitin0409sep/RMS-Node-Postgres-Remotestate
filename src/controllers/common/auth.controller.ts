@@ -1,7 +1,7 @@
 import { ExtendedRequest } from '../../utils/users.interface'
 import { Request, Response } from 'express';
-import { checkUserExists, createUser } from '../../db-helper/common/users.helper';
-import { loginToUser } from '../../db-helper/common/auth.helper';
+import { checkUserExists, createUser } from '../../database/db-helper/common/users.helper';
+import { loginToUser } from '../../database/db-helper/common/auth.helper';
 import { jwtTokens } from '../../utils/jwt.helper';
 import validator from 'validator'; // Validator
 
@@ -53,6 +53,7 @@ export const creatAdmin = async (req: ExtendedRequest, res: Response) => {
             return res.status(400).json({ error: `Please provide ${missingFields.join(', ')}` });
         }
 
+        // Validate email is correct or not in format
         if (!validator.isEmail(email))
             return res.status(400).json({ error: "Please provide proper email." });
 
@@ -92,3 +93,6 @@ export const creatAdmin = async (req: ExtendedRequest, res: Response) => {
         return res.status(500).json({ error: "Something Went Wrong" });
     }
 }
+
+
+export const logoutUser = async (req: Request, res: Response) => { }

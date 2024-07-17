@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { ExtendedRequest } from '../../utils/users.interface';
-import { createDishes, getAllDishes } from '../../db-helper/common/dishes.helper';
-import { getUser } from '../../db-helper/common/users.helper';
+import { createDishes, getAllDishes } from '../../database/db-helper/common/dishes.helper';
+import { getUser } from '../../database/db-helper/common/users.helper';
 
 // CREATE DISH 
 export const createDish = async (req: ExtendedRequest, res: Response) => {

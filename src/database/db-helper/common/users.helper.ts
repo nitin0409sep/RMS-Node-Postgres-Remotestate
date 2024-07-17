@@ -1,6 +1,6 @@
 import { pool } from '../../db-config/db-connection';
 import bcrypt from 'bcrypt';
-import { User } from '../../utils/users.interface';
+import { User } from '../../../utils/users.interface';
 
 // CREATE USER
 export const createUser = async (user_name: string, user_email: string, user_password: string, created_by: number | null, user_roles: number[], created_by_user_id: string) => {
